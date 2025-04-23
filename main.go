@@ -7,16 +7,25 @@ import (
 	"gorm.io/gorm"
 	"github.com/joho/godotenv"
 )
+type Book struct {	
+
+	Author string `json:"author"`	
+	Title string `json:"title"`	
+	Publisher string `json:"publisher"`
+
+
+}
 
 type Repository struct {
 	DB *gorm.DB
 
 }
 func (r *Repository) SetupRoutes(app *fiber.App) {
-	app.Get("/users", r.GetUsers)
-	app.Post("/users", r.CreateUser)
-	app.Put("/users/:id", r.UpdateUser)
-	app.Delete("/users/:id", r.DeleteUser)
+	api:= app.Group("/api")
+	api.Post("/create-books", r.CreateBook)
+	api.Delete("/delete-books/:id", r.DeleteBook)
+	api.Get("/get-books/:id", r.GetBookByID)
+	api.Get("/books", r.GetAllBooks)
 }
 
 func main() {
@@ -28,6 +37,12 @@ func main() {
 		fmt.Println("Error loading .env file")
 	 }
 
+	 db,err:=storage.NewConnection()
+	 if err != nil {	
+		log.Fatal(err)
+		fmt.Println("Error connecting to database")	
+	 }
+
 	 r:=Repository{
 		DB:db,
 	 }
@@ -35,5 +50,5 @@ func main() {
 
 
 	 r.SetupRoutes(app)
-	 app.listen(":8080")
+	 app.Listen(":8080")
 }
