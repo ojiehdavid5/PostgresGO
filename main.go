@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/chuks/PostgresGO/storage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 	"log"
-	"github.com/chuks/PostgresGO/storage"
 )
 
 type Book struct {
